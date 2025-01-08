@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "lgKNUTsEM3M=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\chixr\\RiderProjects\\VeliTest\\Veli\\Veli.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\chixr\\.nuget\\packages\\restsharp\\112.1.0\\restsharp.112.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
