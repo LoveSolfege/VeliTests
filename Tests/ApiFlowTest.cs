@@ -13,10 +13,10 @@ namespace Tests;
 
 [SuppressMessage("ReSharper", "Xunit.XunitTestWithConsoleOutput")]
 [Collection("VeliClientCollection")]
-public class ApiFlowTest(VeliClientFixture fixture)
+public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 {
 	private const string Query = "Sennheiser";
-	private readonly VeliClient _client = fixture.Client;
+	private readonly VeliClient _client = fixture.Client; //using shared client
 
 	[Fact]
 	public async Task Flow()
@@ -175,8 +175,6 @@ public class ApiFlowTest(VeliClientFixture fixture)
 	ProductObject GetProduct(JObject searchResult)
 	{
 		JArray resultAsArray = (JArray)searchResult["pageProps"]["data"]["products"];
-    
-		Console.WriteLine(resultAsArray);
 		
 		var searchObject = resultAsArray
 			.Select(item => new ProductObject(
@@ -184,8 +182,6 @@ public class ApiFlowTest(VeliClientFixture fixture)
 				Sku: (string)item["sku"]
 			))
 			.FirstOrDefault();
-
-		Console.WriteLine(searchObject.Id);
     
 		return searchObject;
 	}
@@ -249,7 +245,6 @@ public class ApiFlowTest(VeliClientFixture fixture)
 		
 		return [];
 	}
-
 	
 	string[] CutOnDashes(string input)
 	{
