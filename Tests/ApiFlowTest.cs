@@ -53,15 +53,15 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		
 		
 		//User filters the products
-		var category = GetCategoryParams(JObject.Parse(response.Content)); //get random available category from search result
+		var category = Helpers.GetCategoryParams(JObject.Parse(response.Content)); //get random available category from search result
 		
-		string categoryUri = MakeCategoryUri(category);
+		string categoryUri = Helpers.MakeCategoryUri(category, Query);
 		
 		response = await _client.GetAsync(categoryUri); //go to the category
 		
-		var filters = GetFilterOptions(JObject.Parse(response.Content)); //get random available filter for the category
+		var filters = Helpers.GetFilterOptions(JObject.Parse(response.Content)); //get random available filter for the category
 		
-		string filterUri = MakeFilterUri(categoryUri, filters);
+		string filterUri = Helpers.MakeFilterUri(categoryUri, filters);
 		
 		response = await _client.GetAsync(filterUri); //Request filtered products
 		
@@ -71,11 +71,11 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		
 		//User sorts products by price descending
 		
-		string descUri = MakeDescendingSortUri(filterUri, Query); //Make URI for sorting by descending price
+		string descUri = Helpers.MakeDescendingSortUri(filterUri, Query); //Make URI for sorting by descending price
 		
 		response = await _client.GetAsync(descUri); //Request sorted products
 
-		var prices = GetAllPrices(JObject.Parse(response.Content)); //Get prices of all products on the page
+		var prices = Helpers.GetAllPrices(JObject.Parse(response.Content)); //Get prices of all products on the page
 		
 		if (prices.Count > 0) //if any products present
 		{
@@ -101,7 +101,7 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		
 		if (prices.Count > 0) //if any products present
 		{
-			ProductObject product = GetProduct(JObject.Parse(response.Content));
+			ProductObject product = Helpers.GetProduct(JObject.Parse(response.Content));
 			id = product.Id;
 			var dummyProduct = new
 			{
@@ -130,7 +130,7 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		
 		
 		//User tries to increase product amount in cart based on quantity value
-		var cartObject = GetCartObject(cartJson, id); //Get cart object for needed product
+		var cartObject = Helpers.GetCartObject(cartJson, id); //Get cart object for needed product
 		
 		var quantity = new
 		{
@@ -148,146 +148,10 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		//User verifies that product details are correct
 		response = await _client.GetAsync(Endpoints.Cart); // get updated cart
 		
-		cartObject = GetCartObject(JObject.Parse(response.Content), id); //get update cart object
+		cartObject = Helpers.GetCartObject(JObject.Parse(response.Content), id); //get update cart object
 		
 		Assert.Equal(quantity.quantity, cartObject.Quantity ); //verify that quantity is updated
 		
 	}
-
 	
-	
-	//Helper methods
-	CartObject GetCartObject(JObject cart, long id)
-	{
-		JArray cartAsArray = (JArray)cart["data"];
-		
-		var cartObject = cartAsArray
-			.Where(item => (long)item["product"]["id"] == id)
-			.Select(item => new CartObject(
-				ObjectId: (long)item["id"],
-				Quantity: (long)item["quantity"]
-			))
-			.FirstOrDefault();
-		
-		return cartObject;
-	}
-
-	ProductObject GetProduct(JObject searchResult)
-	{
-		JArray resultAsArray = (JArray)searchResult["pageProps"]["data"]["products"];
-		
-		var searchObject = resultAsArray
-			.Select(item => new ProductObject(
-				Id: (long)item["id"],
-				Sku: (string)item["sku"]
-			))
-			.FirstOrDefault();
-    
-		return searchObject;
-	}
-	
-	CategoryParams GetCategoryParams(JObject searchResult)
-	{
-		JArray resultAsArray = (JArray)searchResult["pageProps"]["data"]["categories"];
-		
-		var index = RndIndex(resultAsArray);
-		
-		var randomObject = resultAsArray[index];
-			
-		var categoryParams = new CategoryParams(
-				CategoryId: (long)randomObject["id"],
-				Headline: (string)randomObject["headline"],
-				FullSlug: (string)randomObject["full_slug"]
-		);
-		
-		return categoryParams;
-	}
-	
-	FilterOptions GetFilterOptions(JObject searchResult)
-	{
-		JArray resultAsArray = (JArray)searchResult["pageProps"]["data"]["filters"];
-		
-		var index = RndIndex(resultAsArray);
-		
-		var randomObject = resultAsArray[index];
-
-		var filterOptions = ((JArray)randomObject["filter_options"])
-			.Select(option => new FilterOption(
-				OptionId: (long)option["id"],
-				Headline: (string)option["headline"]
-			))
-			.ToList();
-		
-		var filterIndex = RndIndex(filterOptions);
-		var filterOption = filterOptions[filterIndex];
-		
-		var filter = new FilterOptions(
-			FilterId: (long)randomObject["id"],
-			Headline: (string)randomObject["headline"],
-			Option: filterOption
-		);
-		
-		return filter;
-	}
-	
-	List<Stock> GetAllPrices(JObject searchResult)
-	{
-		JArray resultAsArray = (JArray)searchResult["pageProps"]["data"]["products"];
-		
-		if (resultAsArray.Count != 0)
-		{
-			
-			return resultAsArray.Select(item => new Stock(
-				StartPrice: (decimal)item["stock"]["start_price"],
-				Price: (decimal)item["stock"]["price"]
-			)).ToList();
-		}
-		
-		return [];
-	}
-	
-	string[] CutOnDashes(string input)
-	{
-		return input.Split('/');
-	}
-
-	string MakeCategoryUri(CategoryParams category)
-	{
-		
-		string[] slugs = CutOnDashes(category.FullSlug);
-		
-		return Endpoints.Category + "/" + //create category URI 
-		       category.FullSlug + "/" +
-		       category.CategoryId.ToString() + ".json" +
-		       "?q=" + Query +
-		       "&type" + slugs[0] + 
-		       "&type=" + slugs[1] +
-		       "&type=" + slugs[2] +
-		       "&type=" + category.CategoryId.ToString();
-	}
-
-	string MakeFilterUri(String categoryUri, FilterOptions filters)
-	{
-		return categoryUri + "&filter_options=" + filters.Option.OptionId.ToString(); 
-	}
-
-	string MakeDescendingSortUri(String normalUri, string query)
-	{
-		int index = normalUri.IndexOf(query);
-		const string desc = "&ordering=-price";
-		return normalUri.Substring(0, index + query.Length) + desc + normalUri.Substring(index + query.Length);
-	}
-	
-	int RndIndex<T>(IEnumerable<T> array){
-		return Random.Shared.Next(0, array.Count());
-	}
-	
-	
-	//helper data structures
-	private record CartObject(long ObjectId, long Quantity);
-	private record ProductObject(long Id, string Sku);
-	private record CategoryParams(long CategoryId, string Headline, string FullSlug);
-	private record FilterOptions(long FilterId, string Headline, FilterOption Option);
-	private record FilterOption(long OptionId, string Headline);
-	private record Stock(decimal StartPrice, decimal Price);
 }
