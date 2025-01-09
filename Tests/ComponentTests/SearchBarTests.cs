@@ -28,7 +28,7 @@ public class SearchBarTests(VeliClientFixture fixture)
 		Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 		
 		var responseData = JsonConvert.DeserializeObject<JObject>(response.Content);
-		var qValue = responseData["q"]?.First?.ToString();
+		var qValue = responseData["q"].First.ToString();
 		
 		Assert.Equal(expectedError, qValue);
 	}
