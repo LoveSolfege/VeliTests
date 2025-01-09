@@ -12,6 +12,7 @@ namespace Tests.ComponentTests;
 public class SearchBarTests(VeliClientFixture fixture)
 {
 	private readonly VeliClient _client = fixture.Client;
+	
 	private const string ShortQuery = "a";
 	private static readonly string EmptyQuery = string.Empty;
 	private const string NormalQuery = "Pixel";
@@ -30,7 +31,6 @@ public class SearchBarTests(VeliClientFixture fixture)
 		var qValue = responseData["q"]?.First?.ToString();
 		
 		Assert.Equal(expectedError, qValue);
-		
 	}
 	
 	[Fact]
@@ -47,7 +47,6 @@ public class SearchBarTests(VeliClientFixture fixture)
 		var qValue = responseData["q"]?.First?.ToString();
 		
 		Assert.Equal(expectedError, qValue);
-		
 	}
 	
 	[Fact]

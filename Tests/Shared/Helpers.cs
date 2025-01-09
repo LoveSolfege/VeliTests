@@ -37,6 +37,21 @@ public static class Helpers
     
 		return searchObject;
 	}
+
+	public static ProductObject GetProductFromCart(JObject cart)
+	{
+		JArray resultAsArray = (JArray)cart["data"];
+		
+		var searchObject = resultAsArray
+			.Select(item => new ProductObject(
+				Id: (long)item["product"]["id"],
+				Sku: (string)item["sku"]
+			))
+			.FirstOrDefault();
+    
+		return searchObject;
+	}
+	
 	
 	public static CategoryParams GetCategoryParams(JObject searchResult)
 	{
@@ -132,5 +147,10 @@ public static class Helpers
 	
 	public static int RndIndex<T>(IEnumerable<T> array){
 		return Random.Shared.Next(0, array.Count());
+	}
+
+	public static string MakeSearchPageUri(string query)
+	{
+		return $"{Endpoints.SearchPageResult}?q={query}";
 	}
 }

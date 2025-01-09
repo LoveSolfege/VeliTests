@@ -454,6 +454,22 @@
           }
         }
       },
+      "Xunit.Priority/1.1.6": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "2.3.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Xunit.Priority.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Xunit.Priority.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "xunit.runner.visualstudio/2.8.2": {
         "type": "package",
         "compile": {
@@ -1178,6 +1194,23 @@
         "xunit.extensibility.execution.nuspec"
       ]
     },
+    "Xunit.Priority/1.1.6": {
+      "sha512": "VF8yb6PHWb7ABkbEoWbesg0DsN3Pt7HQ2CGaIjyUh23jo3aCRm1zOAP/zQQh3B3Gi3K+5Xds8qs+SRUB2Hyr6Q==",
+      "type": "package",
+      "path": "xunit.priority/1.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/Xunit.Priority.dll",
+        "lib/net452/Xunit.Priority.xml",
+        "lib/netstandard1.1/Xunit.Priority.dll",
+        "lib/netstandard1.1/Xunit.Priority.xml",
+        "lib/netstandard2.0/Xunit.Priority.dll",
+        "lib/netstandard2.0/Xunit.Priority.xml",
+        "xunit.priority.1.1.6.nupkg.sha512",
+        "xunit.priority.nuspec"
+      ]
+    },
     "xunit.runner.visualstudio/2.8.2": {
       "sha512": "vm1tbfXhFmjFMUmS4M0J0ASXz3/U5XvXBa6DOQUL3fEz4Vt6YPhv+ESCarx6M6D+9kJkJYZKCNvJMas1+nVfmQ==",
       "type": "package",
@@ -1216,6 +1249,7 @@
       "Newtonsoft.Json >= 13.0.3",
       "RestSharp >= 112.1.0",
       "Veli >= 1.0.0",
+      "Xunit.Priority >= 1.1.6",
       "coverlet.collector >= 6.0.2",
       "xunit >= 2.9.2",
       "xunit.runner.visualstudio >= 2.8.2"
@@ -1291,6 +1325,10 @@
           "RestSharp": {
             "target": "Package",
             "version": "[112.1.0, )"
+          },
+          "Xunit.Priority": {
+            "target": "Package",
+            "version": "[1.1.6, )"
           },
           "coverlet.collector": {
             "target": "Package",

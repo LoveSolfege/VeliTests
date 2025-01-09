@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Gegs34tFdnM=",
+  "dgSpecHash": "wuXFWa34g2w=",
   "success": true,
   "projectFilePath": "C:\\Users\\chixr\\RiderProjects\\VeliTest\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\chixr\\.nuget\\packages\\xunit.core\\2.9.2\\xunit.core.2.9.2.nupkg.sha512",
     "C:\\Users\\chixr\\.nuget\\packages\\xunit.extensibility.core\\2.9.2\\xunit.extensibility.core.2.9.2.nupkg.sha512",
     "C:\\Users\\chixr\\.nuget\\packages\\xunit.extensibility.execution\\2.9.2\\xunit.extensibility.execution.2.9.2.nupkg.sha512",
+    "C:\\Users\\chixr\\.nuget\\packages\\xunit.priority\\1.1.6\\xunit.priority.1.1.6.nupkg.sha512",
     "C:\\Users\\chixr\\.nuget\\packages\\xunit.runner.visualstudio\\2.8.2\\xunit.runner.visualstudio.2.8.2.nupkg.sha512"
   ],
   "logs": []
