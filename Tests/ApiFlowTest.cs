@@ -84,7 +84,8 @@ public class ApiFlowTest(VeliClientFixture fixture)//shared client for all tests
 		}
 		else //if all products were filtered out
 		{
-			Console.WriteLine("ALL PRODUCTS WERE FILTERED OUT");
+			Console.WriteLine("API FLOW TESTS: ALL PRODUCTS WERE FILTERED OUT");
+			Console.WriteLine("PRODUCT WITH ID 168127 WILL BE USED FOR CART INTERACTIONS");
 			Assert.Equal(HttpStatusCode.OK, response.StatusCode); //check if request was successful
 			Assert.Empty(prices); //make sure no products are present
 		}
